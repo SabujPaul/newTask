@@ -8,7 +8,7 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     due_date = models.DateField()
-    img = models.ImageField(upload_to = 'pics')
+    img = models.ImageField(upload_to = 'pics', blank=True, null=True)
     priority = models.CharField(max_length=20, choices=[('low', 'Low'), ('medium', 'Medium'), ('high', 'High')])
     is_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

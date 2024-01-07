@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Details{% endblock %}
+
+{% block content %}
+    <h2>{{ task.title }}</h2>
+    <p>{{ task.description }}</p>
+    <p>Due Date: {{ task.due_date }}</p>
+    {% if task.img %}
+    <p>Image: <img src="{{ task.img.url }}" alt="Task Image" width="200" height="200"></p>
+{% endif %}
+    <p>Created at: {{ task.created_at }}</p>
+    <p>Updated at: {{ task.updated_at }}</p>
+    
+{% endblock %}
