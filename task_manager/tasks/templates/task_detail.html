@@ -6,10 +6,25 @@
     <h2>{{ task.title }}</h2>
     <p>{{ task.description }}</p>
     <p>Due Date: {{ task.due_date }}</p>
-    {% if task.img %}
-    <p>Image: <img src="{{ task.img.url }}" alt="Task Image" width="200" height="200"></p>
-{% endif %}
-    <p>Created at: {{ task.created_at }}</p>
-    <p>Updated at: {{ task.updated_at }}</p>
+    <p>Priority: {{ task.priority }}</p>
+    <p>Is Complete: {{ task.is_complete }}</p>
+
+    <h3>Photos</h3>
+    <ul>
+        {% for photo in photos %}
+        
+            {% if photo.image %}
+                <li><img src="{{ photo.image.url }}" alt="Task Photo"></li>
+                <a href="{% url 'tasks:photo_delete' photo.id %}">delete</a>
+            {% endif %}
+     
+        {% endfor %}
+    </ul>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ photo_form.as_p }}
+        <button type="submit">Add Photo</button>
+    </form>
     
 {% endblock %}
