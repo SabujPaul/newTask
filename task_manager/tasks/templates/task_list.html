@@ -4,16 +4,26 @@
 
 {% block content %}
     <h2>Task List</h2>
+
+    <!-- Search Form -->
+    <form method="get" action="{% url 'tasks:task_list' %}">
+        <input type="text" name="search" placeholder="Search by title">
+        <button type="submit">Search</button>
+    </form>
+
     <ul>
         {% for task in tasks %}
             <li>
                 <a href="{% url 'tasks:task_detail' task.id %}">{{ task.title }}</a>
-                {% if task.is_complete %}(Complete){% endif %}
+                {% if task.is_complete %} (Complete){% endif %}
 
+                <!-- Update Button -->
                 <a href="{% url 'tasks:task_update' task.id %}">Update</a>
 
-                <a href="{% url 'tasks:task_delete' task.id %}">Delete </a>
-                {% if task.is_complete %}(Complete){% endif %}
+                <!-- Delete Button -->
+                <a href="{% url 'tasks:task_delete' task.id %}">Delete</a>
+
+                
             </li>
         {% endfor %}
     </ul>

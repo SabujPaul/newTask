@@ -13,7 +13,8 @@ def home(request):
 
 class TaskListView(View):
     def get(self, request):
-        tasks = Task.objects.all()
+        search_query = request.GET.get('search', '')
+        tasks = Task.objects.filter(title__icontains=search_query).order_by('is_complete','-priority', 'due_date')
         return render(request, 'task_list.html', {'tasks': tasks})
 
 class TaskDetailView(View):
