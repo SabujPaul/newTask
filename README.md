@@ -1,10 +1,10 @@
 #clone the repository in gitbash:
 git clone git@github.com:SabujPaul/newTask.git
 
-#now open terminal
+#now open terminal:
 cd newTask
 
-#Activate vartual environment
+#Activate vartual environment:
 venv/Scripts/Activate
 
 cd task_manager
