@@ -1,15 +1,33 @@
 
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .models import Task, Photo
+from .serializers import TaskSerializer, PhotoSerializer
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.urls import reverse
-from .forms import TaskForm , PhotoForm
+from .forms import TaskForm, PhotoForm
 
 
 def home(request):
-    #task = Task.objects.all()
-
     return render(request, "base.html") 
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('tasks:login')
+    template_name = 'signup.html'
+
+class LoginUserView(LoginView):
+    form_class = AuthenticationForm
+    template_name = 'login.html'
+    next_page = 'tasks:home_page'
+
+class LogoutUserView(LogoutView):
+    next_page = 'tasks:login'
 
 class TaskListView(View):
     def get(self, request):
@@ -18,9 +36,6 @@ class TaskListView(View):
         return render(request, 'task_list.html', {'tasks': tasks})
 
 class TaskDetailView(View):
-    # def get(self, request, task_id):
-    #     task = get_object_or_404(Task, id=task_id)
-    #     return render(request, 'task_detail.html', {'task': task})
 
     def get(self, request, task_id):
         task = get_object_or_404(Task, id=task_id)
@@ -81,16 +96,37 @@ class TaskDeleteView(View):
     
 class PhotoDeleteView(View):
     def get(self,request,photo_id):
-        #task = get_object_or_404(Task, id=task_id)
+       
         photo = get_object_or_404(Photo, id=photo_id)
         return render(request, 'delete_photo.html', { 'photo': photo})
 
     def post(self,request,photo_id):
-        #task = get_object_or_404(Task, id=task_id)
+        
         photo = get_object_or_404(Photo, id=photo_id)
         
         if request.method == 'POST':
             photo.delete()
             return redirect(reverse('tasks:task_list'))
 
-   
+
+# Api view
+
+class TaskListAPIView(generics.ListCreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class PhotoListAPIView(generics.ListCreateAPIView):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
+    permission_classes = [IsAuthenticated]
+
+class PhotoDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
+    permission_classes = [IsAuthenticated] 

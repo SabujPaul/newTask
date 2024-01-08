@@ -1,29 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>{% block title %}Task Manager{% endblock %}</title>
 </head>
 <body>
     <header>
-        <!-- Your header content here -->
         <h1>Task Manager</h1>
     </header>
 
+    {% if user.is_authenticated %}
+    
+
     <nav>
-        <!-- Your navigation links here -->
+        <p>Welcome, {{ user.username }}! </p>
         <a href="{% url 'tasks:task_list' %}">Task List</a>
         <a href="{% url 'tasks:task_create' %}">Create Task</a> 
+        <form method="post" action="{% url 'tasks:logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
     </nav>
 
+    {% else %}
+    <p><a href="{% url 'tasks:login' %}">Login</a> | <a href="{% url 'tasks:signup' %}">Sign Up</a></p>
+    {% endif %}
+    
     <main>
         {% block content %}{% endblock %}
     </main>
-
+<section>
     <footer>
-        <!-- Your footer content here -->
         <p>&copy; 2024 Task Manager</p>
     </footer>
+</section>
+    
 </body>
 </html>

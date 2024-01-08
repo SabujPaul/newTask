@@ -13,9 +13,15 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def __str__(self):
+        return f"{self.title} - {self.user.username}"
+
 class Photo(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='photos')
     image = models.ImageField(upload_to='pics', blank=True, null=True)
+
+    def __str__(self):
+        return f"Photo for Task: {self.task.title}"
 
 
 
